@@ -72,7 +72,7 @@ public class MonsterBlindController : MonoBehaviour
             ChasePlayer();
         }
 
-        if (outOfSight && playerInSight)
+        if (outOfSight && !playerInSight)
         {
             ChaseOutOfSight();
         }
@@ -102,16 +102,24 @@ public class MonsterBlindController : MonoBehaviour
         }
     }
 
-    //private void OnTriggerExit2D(Collider2D other)
-    //{
-    //    if (other.gameObject.tag == "Player")
-    //    {
-    //        Debug.Log("Player is out of monster's sight");
-    //        playerInSight = false;
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            playerInSight = true;
+        }
+    }
 
-    //        outOfSight= true;
-    //    }
-    //}
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            Debug.Log("Player is out of monster's sight");
+            playerInSight = false;
+
+            outOfSight = true;
+        }
+    }
 
     private void ChasePlayer()
     {

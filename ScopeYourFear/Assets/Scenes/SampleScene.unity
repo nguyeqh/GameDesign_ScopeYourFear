@@ -2211,7 +2211,7 @@ GameObject:
   - component: {fileID: 1030555582}
   m_Layer: 9
   m_Name: Monster2_blind
-  m_TagString: Monster
+  m_TagString: BlindMonster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

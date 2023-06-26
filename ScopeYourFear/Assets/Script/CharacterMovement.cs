@@ -9,8 +9,8 @@ public class CharacterMovement : MonoBehaviour
     private Animator anim;
     private SpriteRenderer sprite;
     private BoxCollider2D boxCollider;
-    //private enum MovementState { idle = 0, running = 1, jumping = 2, falling = 3, hiding = 4 };
-    private enum MovementState {idle, running, jumping, falling, hiding};
+    //private enum MovementState { idle = 0, walking = 1, jumping = 2, falling = 3, hiding = 4 , running = 5};
+    private enum MovementState {idle, walking, jumping, falling, hiding, running};
     private MovementState state = MovementState.idle;
     public bool characterIsHiding = true;
 
@@ -21,12 +21,15 @@ public class CharacterMovement : MonoBehaviour
     private bool canHide = false;
     private float dirX;
     private GameObject hideStationObject;
-    private const string CHAR_WALKING = "char_run";
+    private GameObject blindMonsterObject, monster1Object;
+    private bool monsterInSight, monsterBlindInSight;
+    private const string CHAR_WALKING = "char_walking";
+    private const string CHAR_RUNNING = "char_run";
     private const string CHAR_JUMPING = "char_jump";
     private const string CHAR_DIE = "char_die";
     private const string CHAR_IDLE = "char_idle";
     private const string CHAR_HIDE = "char_hiding";
-
+    private const string CHAR_SEE_MONSTER = "char_see_monster";
 
 
     // Start is called before the first frame update
@@ -39,7 +42,8 @@ public class CharacterMovement : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim.Play(CHAR_IDLE);
         hideStationObject = GameObject.FindGameObjectWithTag("HideStation");
-        
+        monster1Object = GameObject.FindGameObjectWithTag("Monster");
+        blindMonsterObject = GameObject.FindGameObjectWithTag("BlindMonster");
 
     }
 
@@ -48,6 +52,7 @@ public class CharacterMovement : MonoBehaviour
     {
         dirX = Input.GetAxisRaw("Horizontal");
         MovementController();
+        checkRun4YourLife();
 
         if (canHide && Input.GetKeyDown("up"))
         {
@@ -74,6 +79,19 @@ public class CharacterMovement : MonoBehaviour
         
     }
 
+    private void checkRun4YourLife()
+    {
+        monsterInSight = monster1Object.GetComponent<MonsterController>().playerInSight;
+        monsterBlindInSight = blindMonsterObject.GetComponent<MonsterBlindController>().playerInSight;
+
+        if (!monsterInSight && !monsterBlindInSight)
+        {
+            state = MovementState.walking;
+
+            anim.SetInteger("state", (int)state);
+        }
+    }
+
     private void FixedUpdate()
     {
         if (!characterIsHiding)
@@ -87,7 +105,7 @@ public class CharacterMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Monster")
+        if (other.gameObject.tag == "Monster" || other.gameObject.tag == "BlindMonster")
         {
             if (!characterIsHiding || state != MovementState.hiding || !canHide)
             {
@@ -125,6 +143,13 @@ public class CharacterMovement : MonoBehaviour
     private void MovementController()
     {
         
+        if (state== MovementState.running) {
+            speed= 30f;
+        } else
+        {
+            speed= 10f;
+        }
+        
         player.velocity = new Vector2(dirX * speed , player.velocity.y);
 
         if (Input.GetButtonDown("Jump") && state != MovementState.jumping && isGrounded())
@@ -135,8 +160,15 @@ public class CharacterMovement : MonoBehaviour
 
         if (dirX > 0f)
         {
-            state = MovementState.running;
-            anim.Play(CHAR_WALKING);
+            if (monsterInSight || monsterBlindInSight)
+            {
+                state = MovementState.running;
+                anim.Play(CHAR_RUNNING);
+            } else
+            {
+                state = MovementState.walking;
+                anim.Play(CHAR_WALKING);
+            }
             sprite.flipX = false;
             sprite.flipY = false;
         }
@@ -144,8 +176,17 @@ public class CharacterMovement : MonoBehaviour
         {
             if (dirX < 0f)
             {
-                state = MovementState.running;
-                anim.Play(CHAR_WALKING);
+                if (monsterInSight || monsterBlindInSight)
+                {
+                    state = MovementState.running;
+                    anim.Play(CHAR_RUNNING);
+                }
+                else
+                {
+                    state = MovementState.walking;
+                    anim.Play(CHAR_WALKING);
+                }
+
                 sprite.flipX = true;
                 sprite.flipY = false;
             }
