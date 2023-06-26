@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - HideStation
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -40,4 +42,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: background
+    uniqueID: 4060643831
+    locked: 0
+  - name: mainground
+    uniqueID: 845886805
+    locked: 0
+  - name: object_hide
+    uniqueID: 698030665
+    locked: 0
+  - name: player
+    uniqueID: 3785936453
+    locked: 0
+  - name: foreground
+    uniqueID: 2011023617
     locked: 0
