@@ -21,11 +21,11 @@ public class CharacterMovement : MonoBehaviour
     private bool canHide = false;
     private float dirX;
     private GameObject hideStationObject;
-    private const string CHAR_WALKING = "cat_run";
+    private const string CHAR_WALKING = "char_run";
     private const string CHAR_JUMPING = "char_jump";
     private const string CHAR_DIE = "char_die";
     private const string CHAR_IDLE = "char_idle";
-    private const string CHAR_HIDE = "char_hide";
+    private const string CHAR_HIDE = "char_hiding";
 
 
 
@@ -39,6 +39,7 @@ public class CharacterMovement : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         anim.Play(CHAR_IDLE);
         hideStationObject = GameObject.FindGameObjectWithTag("HideStation");
+        
 
     }
 
@@ -50,7 +51,7 @@ public class CharacterMovement : MonoBehaviour
 
         if (canHide && Input.GetKeyDown("up"))
         {
-            //anim.Play(CHAR_HIDE);
+            anim.Play(CHAR_HIDE);
             Physics2D.IgnoreLayerCollision(8, 9, true);
             sprite.sortingOrder = 0;
             characterIsHiding = true;
@@ -64,7 +65,7 @@ public class CharacterMovement : MonoBehaviour
             Physics2D.IgnoreLayerCollision(8, 9, false);
             sprite.sortingOrder = 2;
             characterIsHiding = false;
-            state = MovementState.hiding;
+            state = MovementState.idle;
             anim.SetBool("isHiding", characterIsHiding);
             Debug.Log("Character is not hiding...");
         }
@@ -100,6 +101,15 @@ public class CharacterMovement : MonoBehaviour
         }
 
         
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "HideStation")
+        {
+            canHide = true;
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D other)

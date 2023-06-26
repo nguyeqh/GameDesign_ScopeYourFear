@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading;
 
-public class MonsterController : MonoBehaviour
+public class MonsterBlindController : MonoBehaviour
 {
     private Rigidbody2D monster;
     private Animator anim;

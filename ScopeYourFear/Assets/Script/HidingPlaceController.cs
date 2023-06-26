@@ -5,7 +5,8 @@ using UnityEngine;
 public class HidingPlaceController : MonoBehaviour
 {
     private Rigidbody2D hidingObject;
-    private BoxCollider2D hidingZone;
+    private BoxCollider2D hidingZone; 
+    private SpriteRenderer sprite;
     private bool canHide = false;
     public GameObject player;
     // Start is called before the first frame update
@@ -13,6 +14,10 @@ public class HidingPlaceController : MonoBehaviour
     {
         hidingObject = GetComponent<Rigidbody2D>();
         hidingZone = GetComponent<BoxCollider2D>();
+        sprite = GetComponent<SpriteRenderer>();
+
+        player = GameObject.FindGameObjectWithTag("Player");
+
 
     }
 
@@ -22,6 +27,7 @@ public class HidingPlaceController : MonoBehaviour
         {
             canHide= true;
 
+            Debug.Log("HidePlaceController: Player can hide!");
         }
     }
 
@@ -29,17 +35,21 @@ public class HidingPlaceController : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            canHide = true;
-
+            canHide = false;
+            Debug.Log("HidePlaceController: Player can not hide!");
+            sprite.sortingOrder = 0;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (canHide && Input.GetKey("e"))
+        bool playerIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
+        if (canHide && playerIsHiding)
         {
-            Debug.Log("Player is hiding");
+            Debug.Log("HidePlaceController: Hide Station just move up!");
+            sprite.sortingOrder = 5;
+
         }
         
     }
