@@ -13,7 +13,7 @@ public class MonsterController : MonoBehaviour
     private GameObject player;
 
     //private enum MovementState { idle =  0, walking = 1, detecting = 2, chasing = 3, catching = 4 };
-    private enum MovementState { idle, walking, detecting, chasing, catching, chaseOutOfSight};
+    private enum MovementState { idle, walking, detecting, chasing, catching, chaseOutOfSight };
     private MovementState state = MovementState.idle;
 
     public float speed;
@@ -26,9 +26,9 @@ public class MonsterController : MonoBehaviour
     private bool characterIsHiding = false;
 
     //------- Const String ----------
-    private const string MONSTER1_IDLE = "monster1_idle";
-    private const string MONSTER1_CHASE = "monster1_chase";
-    private const string MONSTER_DETEC = "monster1_detec_player";
+    private const string MONSTER1_IDLE = "monster_blind_idle";
+    private const string MONSTER1_CHASE = "monster_blind_chase";
+    private const string MONSTER_DETEC = "monster_blind_detec";
 
 
     // Start is called before the first frame update
@@ -57,9 +57,9 @@ public class MonsterController : MonoBehaviour
         if (characterIsHiding)
         {
             monsterBody.isTrigger = true;
-            outOfSight= true;
+            outOfSight = true;
             state = MovementState.chaseOutOfSight;
-        } 
+        }
 
         if (state == MovementState.detecting)
         {
@@ -72,7 +72,8 @@ public class MonsterController : MonoBehaviour
             ChasePlayer();
         }
 
-        if(outOfSight && playerInSight) { 
+        if (outOfSight && playerInSight)
+        {
             ChaseOutOfSight();
         }
 
@@ -81,7 +82,7 @@ public class MonsterController : MonoBehaviour
 
     }
 
-    IEnumerator DelayedChase (float _delayed = 0)
+    IEnumerator DelayedChase(float _delayed = 0)
     {
         yield return new WaitForSeconds(_delayed);
 
@@ -97,7 +98,7 @@ public class MonsterController : MonoBehaviour
             state = MovementState.detecting;
             Debug.Log("Player in sight!");
 
-            anim.SetInteger("stateMon", (int) state);
+            anim.SetInteger("stateMon", (int)state);
         }
     }
 
@@ -107,7 +108,7 @@ public class MonsterController : MonoBehaviour
     //    {
     //        Debug.Log("Player is out of monster's sight");
     //        playerInSight = false;
-            
+
     //        outOfSight= true;
     //    }
     //}
@@ -121,18 +122,18 @@ public class MonsterController : MonoBehaviour
         anim.Play(MONSTER1_CHASE);
 
 
-        if (playerPosition.x < transform.position.x )
+        if (playerPosition.x < transform.position.x)
         {
             transform.position += Vector3.left * speed * Time.deltaTime;
             //sprite.flipX = true;
-            if (facingRight) FlipChar();
-            
+            if (facingRight) Flip();
+
         }
 
         //if (playerPosition.x > transform.position.x)
         //{
-            //if (!facingRight) Flip();
-            //sprite.flipX = false;
+        //if (!facingRight) Flip();
+        //sprite.flipX = false;
         //    transform.position += Vector3.right * speed * Time.deltaTime;
         //}
         //transform.position = Vector2.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
@@ -144,7 +145,7 @@ public class MonsterController : MonoBehaviour
         transform.position += Vector3.left * speed * Time.deltaTime;
     }
 
-    private void FlipChar()
+    private void Flip()
     {
         facingRight = !facingRight;
         transform.Rotate(0f, 180f, 0f);
