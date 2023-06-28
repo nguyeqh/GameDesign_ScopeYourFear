@@ -10,7 +10,7 @@ public class MonsterBlindController : MonoBehaviour
     private SpriteRenderer sprite;
     private BoxCollider2D monsterVision;
     private PolygonCollider2D monsterBody;
-    private GameObject player;
+    private GameObject player, monster1Object;
 
     //private enum MovementState { idle =  0, walking = 1, detecting = 2, chasing = 3, catching = 4 };
     private enum MovementState { idle, walking, detecting, chasing, catching, chaseOutOfSight };
@@ -41,6 +41,7 @@ public class MonsterBlindController : MonoBehaviour
         monsterBody = GetComponent<PolygonCollider2D>();
         player = GameObject.FindGameObjectWithTag("Player");
         //currentState = anim.GetCurrentAnimatorStateInfo(0);
+        monster1Object = GameObject.FindGameObjectWithTag("Monster");
 
         characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
     }
@@ -53,32 +54,38 @@ public class MonsterBlindController : MonoBehaviour
             Debug.Log("Can not find player!");
             return;
         }
-        characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
-        if (characterIsHiding)
-        {
-            monsterBody.isTrigger = true;
-            outOfSight = true;
-            state = MovementState.chaseOutOfSight;
-        }
+        bool monster1InSight = monster1Object.GetComponent<MonsterController>().playerInSight;
+        if (!monster1InSight) {
 
-        if (state == MovementState.detecting)
-        {
-            anim.Play(MONSTER_DETEC);
-            StartCoroutine(DelayedChase(anim.GetCurrentAnimatorStateInfo(0).length));
-        }
+            characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
+            if (characterIsHiding)
+            {
+                monsterBody.isTrigger = true;
+                outOfSight = true;
+                state = MovementState.chaseOutOfSight;
+            }
 
-        if (state == MovementState.chasing)
-        {
-            ChasePlayer();
-        }
+            if (state == MovementState.detecting)
+            {
+                anim.Play(MONSTER_DETEC);
+                StartCoroutine(DelayedChase(anim.GetCurrentAnimatorStateInfo(0).length));
+            }
 
-        if (outOfSight && !playerInSight)
-        {
-            ChaseOutOfSight();
-        }
+            if (state == MovementState.chasing)
+            {
+                ChasePlayer();
+            }
 
-        anim.SetInteger("stateMon", (int)state);
-        sprite.flipX = false;
+            if (outOfSight)
+            {
+                ChaseOutOfSight();
+            }
+
+            anim.SetInteger("stateMon", (int)state);
+            sprite.flipX = false;
+
+        }
+        
 
     }
 
@@ -117,7 +124,7 @@ public class MonsterBlindController : MonoBehaviour
             Debug.Log("Player is out of monster's sight");
             playerInSight = false;
 
-            outOfSight = true;
+            //outOfSight = true;
         }
     }
 
@@ -151,6 +158,9 @@ public class MonsterBlindController : MonoBehaviour
     private void ChaseOutOfSight()
     {
         transform.position += Vector3.left * speed * Time.deltaTime;
+        //transform.position.y = player.GetComponent<Rigidbody2D>().position.y;
+        playerInSight = false;
+
     }
 
     private void Flip()

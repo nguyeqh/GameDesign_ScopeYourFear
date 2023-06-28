@@ -51,8 +51,7 @@ public class CharacterMovement : MonoBehaviour
     void Update()
     {
         dirX = Input.GetAxisRaw("Horizontal");
-        MovementController();
-        checkRun4YourLife();
+
 
         if (canHide && Input.GetKeyDown("up"))
         {
@@ -76,7 +75,11 @@ public class CharacterMovement : MonoBehaviour
         }
 
         Debug.Log(characterIsHiding);
-        
+        checkRun4YourLife();
+        MovementController();
+
+
+
     }
 
     private void checkRun4YourLife()
@@ -84,12 +87,17 @@ public class CharacterMovement : MonoBehaviour
         monsterInSight = monster1Object.GetComponent<MonsterController>().playerInSight;
         monsterBlindInSight = blindMonsterObject.GetComponent<MonsterBlindController>().playerInSight;
 
-        if (!monsterInSight && !monsterBlindInSight)
+        if (monsterInSight)
         {
-            state = MovementState.walking;
-
-            anim.SetInteger("state", (int)state);
+            Debug.Log("CharacterController: Monster in sight!");
         }
+
+        if (monsterBlindInSight)
+        {
+            Debug.Log("CharacterController: Blind monster in sight!");
+        }
+
+        
     }
 
     private void FixedUpdate()
@@ -143,7 +151,7 @@ public class CharacterMovement : MonoBehaviour
     private void MovementController()
     {
         
-        if (state== MovementState.running) {
+        if (state == MovementState.running) {
             speed= 30f;
         } else
         {
@@ -158,13 +166,15 @@ public class CharacterMovement : MonoBehaviour
             
         }
 
+        
         if (dirX > 0f)
         {
             if (monsterInSight || monsterBlindInSight)
             {
                 state = MovementState.running;
                 anim.Play(CHAR_RUNNING);
-            } else
+            }
+            else
             {
                 state = MovementState.walking;
                 anim.Play(CHAR_WALKING);
@@ -190,12 +200,15 @@ public class CharacterMovement : MonoBehaviour
                 sprite.flipX = true;
                 sprite.flipY = false;
             }
-            else
+            else 
             {
                 state = MovementState.idle;
                 sprite.flipY = false;
             }
         }
+        
+
+       
 
         if (!isGrounded())
         {

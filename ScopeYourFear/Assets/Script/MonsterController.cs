@@ -43,6 +43,7 @@ public class MonsterController : MonoBehaviour
         //currentState = anim.GetCurrentAnimatorStateInfo(0);
 
         characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
+        sprite.sortingOrder = 5;
     }
 
     // Update is called once per frame
@@ -72,7 +73,7 @@ public class MonsterController : MonoBehaviour
             ChasePlayer();
         }
 
-        if(outOfSight && playerInSight) { 
+        if(outOfSight) { 
             ChaseOutOfSight();
         }
 
@@ -142,6 +143,7 @@ public class MonsterController : MonoBehaviour
     private void ChaseOutOfSight()
     {
         transform.position += Vector3.left * speed * Time.deltaTime;
+        playerInSight = false;
     }
 
     private void FlipChar()

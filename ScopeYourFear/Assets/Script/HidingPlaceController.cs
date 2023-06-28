@@ -48,7 +48,7 @@ public class HidingPlaceController : MonoBehaviour
         if (canHide && playerIsHiding)
         {
             Debug.Log("HidePlaceController: Hide Station just move up!");
-            sprite.sortingOrder = 5;
+            sprite.sortingOrder = 2;
 
         }
         
