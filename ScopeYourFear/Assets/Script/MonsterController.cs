@@ -5,7 +5,7 @@ using System.Threading;
 
 public class MonsterController : MonoBehaviour
 {
-    private Rigidbody2D monster;
+    public Rigidbody2D monster;
     private Animator anim;
     private SpriteRenderer sprite;
     private BoxCollider2D monsterVision;
@@ -25,11 +25,13 @@ public class MonsterController : MonoBehaviour
     private bool outOfSight = false;
     private bool characterIsHiding = false;
     private bool characterWasSeen = false;
+    private bool characterIsDead = false;
 
     //------- Const String ----------
     private const string MONSTER1_IDLE = "monster1_idle";
     private const string MONSTER1_CHASE = "monster1_chase";
     private const string MONSTER_DETEC = "monster1_detec_player";
+    private const string MONSTER_CAUGHT = "monster1_caught";
 
 
     // Start is called before the first frame update
@@ -44,6 +46,7 @@ public class MonsterController : MonoBehaviour
         //currentState = anim.GetCurrentAnimatorStateInfo(0);
 
         characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
+        characterIsDead = player.GetComponent<CharacterMovement>().characterIsDead;
         sprite.sortingOrder = 5;
     }
 
@@ -56,7 +59,8 @@ public class MonsterController : MonoBehaviour
             return;
         }
         characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
-        if (characterIsHiding && characterWasSeen)
+        characterIsDead = player.GetComponent<CharacterMovement>().characterIsDead;
+        if (characterIsHiding && characterWasSeen && !characterIsDead)
         {
             monsterBody.isTrigger = true;
             outOfSight= true;
@@ -70,13 +74,27 @@ public class MonsterController : MonoBehaviour
             StartCoroutine(DelayedChase(anim.GetCurrentAnimatorStateInfo(0).length));
         }
 
-        if (state == MovementState.chasing)
+        if (state == MovementState.chasing && !characterIsDead)
         {
             ChasePlayer();
         }
 
-        if(outOfSight) { 
-            ChaseOutOfSight();
+       
+
+        if (characterIsDead)
+        {
+            state = MovementState.catching;
+            outOfSight = false;
+            anim.SetTrigger("caught");
+            anim.Play(MONSTER_CAUGHT);
+            Debug.Log("Caught Player!");
+
+        } else
+        {
+            if (outOfSight)
+            {
+                ChaseOutOfSight();
+            }
         }
 
         anim.SetInteger("stateMon", (int)state);
@@ -132,20 +150,26 @@ public class MonsterController : MonoBehaviour
             
         }
 
-        //if (playerPosition.x > transform.position.x)
-        //{
-            //if (!facingRight) Flip();
+        if (playerPosition.x > transform.position.x)
+        {
+           if (!facingRight) FlipChar();
             //sprite.flipX = false;
-        //    transform.position += Vector3.right * speed * Time.deltaTime;
-        //}
+            transform.position += Vector3.right * speed * Time.deltaTime;
+        }
+
         //transform.position = Vector2.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
         //transform.velocity = new Vector2(transform.dirX * speed, transform.velocity.y);
     }
 
     private void ChaseOutOfSight()
     {
-        transform.position += Vector3.left * speed * Time.deltaTime;
-        playerInSight = false;
+        if (!characterIsDead)
+        {
+            transform.position += Vector3.left * speed * Time.deltaTime;
+            playerInSight = false;
+            state = MovementState.chaseOutOfSight;
+        }
+       
     }
 
     private void FlipChar()

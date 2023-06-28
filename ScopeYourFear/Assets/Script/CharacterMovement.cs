@@ -14,6 +14,7 @@ public class CharacterMovement : MonoBehaviour
     private enum MovementState {idle, walking, jumping, falling, hiding, running};
     private MovementState state = MovementState.idle;
     public bool characterIsHiding = true;
+    public bool characterIsDead = false;
 
     [SerializeField] private LayerMask jumpableGround;
     public GameOverController gameOverController; //It's a screen only
@@ -268,10 +269,17 @@ public class CharacterMovement : MonoBehaviour
         anim.SetTrigger("death");
         anim.Play(CHAR_DIE);
         Debug.Log("You died!");
-        player.bodyType = RigidbodyType2D.Static;
 
+        var getCaughtPosition = new Vector2(transform.position.x - 3f, transform.position.y + 3f) ;
+
+        transform.position = Vector2.MoveTowards(transform.position, getCaughtPosition, speed * Time.deltaTime);
+
+        characterIsDead = true;
         gameOverController.Setup(0);
-        
+
+        player.bodyType = RigidbodyType2D.Static;
+        //monster1Object.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        //blindMonsterObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
 
     }
 
