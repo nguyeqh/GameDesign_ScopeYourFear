@@ -46,6 +46,7 @@ public class CharacterMovement : MonoBehaviour
         anim.Play(CHAR_IDLE);
 
         able2Teleport = false;
+     
 
         hideStationObject = GameObject.FindGameObjectWithTag("HideStation");
         monster1Object = GameObject.FindGameObjectWithTag("Monster");
@@ -268,7 +269,9 @@ public class CharacterMovement : MonoBehaviour
         anim.Play(CHAR_DIE);
         Debug.Log("You died!");
         player.bodyType = RigidbodyType2D.Static;
+
         gameOverController.Setup(0);
+        
 
     }
 

@@ -24,6 +24,7 @@ public class MonsterBlindController : MonoBehaviour
 
     private bool outOfSight = false;
     private bool characterIsHiding = false;
+    private bool characterWasSeen = false;
 
     //------- Const String ----------
     private const string MONSTER1_IDLE = "monster_blind_idle";
@@ -59,7 +60,7 @@ public class MonsterBlindController : MonoBehaviour
         if (!monster1InSight) {
 
             characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
-            if (characterIsHiding)
+            if (characterIsHiding && characterWasSeen)
             {
                 monsterBody.isTrigger = true;
                 outOfSight = true;
@@ -69,6 +70,7 @@ public class MonsterBlindController : MonoBehaviour
             if (state == MovementState.detecting)
             {
                 anim.Play(MONSTER_DETEC);
+                characterWasSeen = true;
                 StartCoroutine(DelayedChase(anim.GetCurrentAnimatorStateInfo(0).length));
             }
 
