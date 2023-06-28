@@ -59,6 +59,9 @@ TagManager:
   - name: player
     uniqueID: 3785936453
     locked: 0
+  - name: object_tuongtac
+    uniqueID: 3176079373
+    locked: 0
   - name: foreground
     uniqueID: 2011023617
     locked: 0

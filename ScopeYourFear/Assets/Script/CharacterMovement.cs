@@ -176,7 +176,7 @@ public class CharacterMovement : MonoBehaviour
             speed= 30f;
         } else
         {
-            speed= 10f;
+            speed= 20f;
         }
         
         player.velocity = new Vector2(dirX * speed , player.velocity.y);
@@ -184,6 +184,7 @@ public class CharacterMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && state != MovementState.jumping && isGrounded())
         {
             player.velocity = new Vector2(player.velocity.x, gravity);
+            //anim.Play(CHAR_JUMPING);
             
         }
 
@@ -193,12 +194,18 @@ public class CharacterMovement : MonoBehaviour
             if (monsterInSight || monsterBlindInSight)
             {
                 state = MovementState.running;
-                anim.Play(CHAR_RUNNING);
+                if (isGrounded())
+                {
+                    anim.Play(CHAR_RUNNING);
+                }
             }
             else
             {
                 state = MovementState.walking;
-                anim.Play(CHAR_WALKING);
+                if (isGrounded())
+                {
+                    anim.Play(CHAR_WALKING);
+                }
             }
             sprite.flipX = false;
             sprite.flipY = false;
@@ -210,12 +217,19 @@ public class CharacterMovement : MonoBehaviour
                 if (monsterInSight || monsterBlindInSight)
                 {
                     state = MovementState.running;
-                    anim.Play(CHAR_RUNNING);
+                    if (isGrounded())
+                    {
+                        anim.Play(CHAR_RUNNING);
+                    }
+
                 }
                 else
                 {
                     state = MovementState.walking;
-                    anim.Play(CHAR_WALKING);
+                    if (isGrounded())
+                    {
+                        anim.Play(CHAR_WALKING);
+                    }
                 }
 
                 sprite.flipX = true;

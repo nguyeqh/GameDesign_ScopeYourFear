@@ -44,6 +44,7 @@ public class MonsterBlindController : MonoBehaviour
         monster1Object = GameObject.FindGameObjectWithTag("Monster");
 
         characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
+        sprite.sortingOrder = 5;
     }
 
     // Update is called once per frame

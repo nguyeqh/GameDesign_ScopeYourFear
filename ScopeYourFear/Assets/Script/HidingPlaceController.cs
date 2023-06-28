@@ -15,6 +15,7 @@ public class HidingPlaceController : MonoBehaviour
         hidingObject = GetComponent<Rigidbody2D>();
         hidingZone = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
+        sprite.sortingOrder = 0;
 
         player = GameObject.FindGameObjectWithTag("Player");
 
@@ -31,6 +32,8 @@ public class HidingPlaceController : MonoBehaviour
         }
     }
 
+
+
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")
@@ -38,7 +41,9 @@ public class HidingPlaceController : MonoBehaviour
             canHide = false;
             Debug.Log("HidePlaceController: Player can not hide!");
             sprite.sortingOrder = 0;
+
         }
+        
     }
 
     // Update is called once per frame
@@ -48,9 +53,9 @@ public class HidingPlaceController : MonoBehaviour
         if (canHide && playerIsHiding)
         {
             Debug.Log("HidePlaceController: Hide Station just move up!");
-            sprite.sortingOrder = 2;
+            sprite.sortingOrder = 3;
 
-        }
+        } 
         
     }
 }
