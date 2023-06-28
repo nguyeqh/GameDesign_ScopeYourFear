@@ -9,12 +9,14 @@ public class CharacterMovement : MonoBehaviour
     private Animator anim;
     private SpriteRenderer sprite;
     private BoxCollider2D boxCollider;
+
     //private enum MovementState { idle = 0, walking = 1, jumping = 2, falling = 3, hiding = 4 , running = 5};
     private enum MovementState {idle, walking, jumping, falling, hiding, running};
     private MovementState state = MovementState.idle;
     public bool characterIsHiding = true;
 
     [SerializeField] private LayerMask jumpableGround;
+    public GameOverController gameOverController; //It's a screen only
 
     public float speed;
     private float gravity = 4f;
@@ -266,7 +268,8 @@ public class CharacterMovement : MonoBehaviour
         anim.Play(CHAR_DIE);
         Debug.Log("You died!");
         player.bodyType = RigidbodyType2D.Static;
-        
+        gameOverController.Setup(0);
+
     }
 
     private void TeleportToZone2()
