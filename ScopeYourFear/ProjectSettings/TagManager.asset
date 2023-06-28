@@ -8,6 +8,8 @@ TagManager:
   - Monster
   - Ground
   - BlindMonster
+  - Teleporter
+  - TeleporterZone2
   layers:
   - Default
   - TransparentFX

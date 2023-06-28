@@ -20,9 +20,9 @@ public class CharacterMovement : MonoBehaviour
     private float gravity = 4f;
     private bool canHide = false;
     private float dirX;
-    private GameObject hideStationObject;
+    private GameObject hideStationObject, teleporter, teleporterZone2;
     private GameObject blindMonsterObject, monster1Object;
-    private bool monsterInSight, monsterBlindInSight;
+    private bool monsterInSight, monsterBlindInSight, able2Teleport;
     private const string CHAR_WALKING = "char_walking";
     private const string CHAR_RUNNING = "char_run";
     private const string CHAR_JUMPING = "char_jump";
@@ -40,10 +40,16 @@ public class CharacterMovement : MonoBehaviour
         player = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+
         anim.Play(CHAR_IDLE);
+
+        able2Teleport = false;
+
         hideStationObject = GameObject.FindGameObjectWithTag("HideStation");
         monster1Object = GameObject.FindGameObjectWithTag("Monster");
         blindMonsterObject = GameObject.FindGameObjectWithTag("BlindMonster");
+        teleporter = GameObject.FindGameObjectWithTag("Teleporter");
+        teleporterZone2 = GameObject.FindGameObjectWithTag("TeleporterZone2");
 
     }
 
@@ -74,10 +80,14 @@ public class CharacterMovement : MonoBehaviour
             Debug.Log("Character is not hiding...");
         }
 
-        Debug.Log(characterIsHiding);
+        
         checkRun4YourLife();
         MovementController();
 
+        if (able2Teleport)
+        {
+            TeleportToZone2();
+        }
 
 
     }
@@ -144,7 +154,18 @@ public class CharacterMovement : MonoBehaviour
         {
             canHide = false;
         }
+
+      
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Teleporter"))
+        {
+            able2Teleport = true;
+        }
+    }
+
 
 
     //---------------------------------------------------
@@ -232,7 +253,12 @@ public class CharacterMovement : MonoBehaviour
         Debug.Log("You died!");
         player.bodyType = RigidbodyType2D.Static;
         
-        
+    }
+
+    private void TeleportToZone2()
+    {
+        Debug.Log("Go to zone 2");
+        player.position = teleporterZone2.transform.position;
     }
 
    
