@@ -19,4 +19,6 @@ public class GameOverController : MonoBehaviour
     {
         SceneManager.LoadScene("HomeScreen");
     }
+
+   
 }

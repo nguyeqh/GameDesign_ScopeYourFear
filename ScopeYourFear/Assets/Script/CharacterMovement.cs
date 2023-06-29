@@ -15,9 +15,11 @@ public class CharacterMovement : MonoBehaviour
     private MovementState state = MovementState.idle;
     public bool characterIsHiding = true;
     public bool characterIsDead = false;
+    public bool stage_finish = false;
 
     [SerializeField] private LayerMask jumpableGround;
     public GameOverController gameOverController; //It's a screen only
+    public StageClearScene stageClearScene;
 
     public float speed;
     private float gravity = 4f;
@@ -84,13 +86,14 @@ public class CharacterMovement : MonoBehaviour
             Debug.Log("Character is not hiding...");
         }
 
-        
-        checkRun4YourLife();
-        MovementController();
 
-        if (able2Teleport)
+        if (stage_finish)
         {
-            TeleportToZone2();
+            ShowFinishScene();
+        } else
+        {
+            checkRun4YourLife();
+            MovementController();
         }
 
 
@@ -140,7 +143,11 @@ public class CharacterMovement : MonoBehaviour
             canHide = true;
         }
 
-        
+        if (other.gameObject.tag == "FinishPoint")
+        {
+            stage_finish = true;
+        }
+
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -164,9 +171,9 @@ public class CharacterMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Teleporter"))
+        if (collision.CompareTag("FinishPoint"))
         {
-            able2Teleport = true;
+            stage_finish = true;
         }
     }
 
@@ -283,12 +290,18 @@ public class CharacterMovement : MonoBehaviour
 
     }
 
-    private void TeleportToZone2()
+    private void ShowFinishScene()
     {
-        Debug.Log("Go to zone 2");
-        player.position = teleporterZone2.transform.position;
+        stageClearScene.Setup(2);
+        player.bodyType = RigidbodyType2D.Static;
+
+        var finishPosition = new Vector2(transform.position.x + 0.01f, transform.position.y);
+
+        transform.position = Vector2.MoveTowards(transform.position, finishPosition, speed * Time.deltaTime);
+
+
     }
 
-   
+
 
 }
