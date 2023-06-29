@@ -17,6 +17,7 @@ public class CharacterMovement : MonoBehaviour
     public bool characterIsDead = false;
     public bool stage_finish = false;
     public bool can_collect = false;
+    public bool charJustCollectSomething = false;
 
     [SerializeField] private LayerMask jumpableGround;
     public GameOverController gameOverController; //It's a screen only
@@ -51,8 +52,8 @@ public class CharacterMovement : MonoBehaviour
         anim.Play(CHAR_IDLE);
 
         able2Teleport = false;
-     
 
+        
         hideStationObject = GameObject.FindGameObjectWithTag("HideStation");
         monster1Object = GameObject.FindGameObjectWithTag("Monster");
         blindMonsterObject = GameObject.FindGameObjectWithTag("BlindMonster");
@@ -94,6 +95,12 @@ public class CharacterMovement : MonoBehaviour
         if (can_collect && Input.GetKeyDown(KeyCode.E))
         {
             anim.Play(CHAR_COLLECT);
+            checkCanCollectedItem();
+        }
+
+        if (characterIsHiding)
+        {
+            anim.Play(CHAR_HIDE);
         }
 
 
@@ -102,6 +109,7 @@ public class CharacterMovement : MonoBehaviour
             ShowFinishScene();
         } else
         {
+            
             checkRun4YourLife();
             MovementController();
         }
@@ -123,10 +131,16 @@ public class CharacterMovement : MonoBehaviour
         {
             Debug.Log("CharacterController: Blind monster in sight!");
         }
-
-        
     }
 
+    private void checkCanCollectedItem()
+    {
+        if (can_collect)
+        {
+            can_collect = false;
+            charJustCollectSomething = true;
+        }
+    }
     private void FixedUpdate()
     {
         if (!characterIsHiding)
@@ -152,9 +166,11 @@ public class CharacterMovement : MonoBehaviour
         {
             canHide = true;
         }
-        if (other.gameObject.tag == "ItemCollect")
+        if (other.gameObject.tag == "ItemCollect" && other.gameObject.activeSelf)
         {
             can_collect = true;
+            charJustCollectSomething = false;
+            Debug.Log("CharacterMovement: Can collect Item");
         }
 
         if (other.gameObject.tag == "FinishPoint")
@@ -170,10 +186,12 @@ public class CharacterMovement : MonoBehaviour
         {
             canHide = true;
         }
-        if (other.gameObject.tag == "ItemCollect")
+
+        if (other.gameObject.tag == "ItemCollect" && !charJustCollectSomething && other.gameObject.activeSelf)
         {
             can_collect = true;
         }
+        
 
     }
 
@@ -187,6 +205,7 @@ public class CharacterMovement : MonoBehaviour
         if (other.gameObject.tag == "ItemCollect")
         {
             can_collect = false;
+            charJustCollectSomething = false;
         }
 
 
