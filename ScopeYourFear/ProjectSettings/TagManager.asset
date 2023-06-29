@@ -12,6 +12,7 @@ TagManager:
   - TeleporterZone2
   - GameOverBG
   - FinishPoint
+  - ItemCollect
   layers:
   - Default
   - TransparentFX

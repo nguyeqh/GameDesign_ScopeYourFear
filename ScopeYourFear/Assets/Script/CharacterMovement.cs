@@ -10,12 +10,13 @@ public class CharacterMovement : MonoBehaviour
     private SpriteRenderer sprite;
     private BoxCollider2D boxCollider;
 
-    //private enum MovementState { idle = 0, walking = 1, jumping = 2, falling = 3, hiding = 4 , running = 5};
-    private enum MovementState {idle, walking, jumping, falling, hiding, running};
+    //private enum MovementState { idle = 0, walking = 1, jumping = 2, falling = 3, hiding = 4 , running = 5, collect = 6};
+    private enum MovementState {idle, walking, jumping, falling, hiding, running, collect};
     private MovementState state = MovementState.idle;
     public bool characterIsHiding = true;
     public bool characterIsDead = false;
     public bool stage_finish = false;
+    public bool can_collect = false;
 
     [SerializeField] private LayerMask jumpableGround;
     public GameOverController gameOverController; //It's a screen only
@@ -35,6 +36,7 @@ public class CharacterMovement : MonoBehaviour
     private const string CHAR_IDLE = "char_idle";
     private const string CHAR_HIDE = "char_hiding";
     private const string CHAR_SEE_MONSTER = "char_see_monster";
+    private const string CHAR_COLLECT = "char_collect";
 
 
     // Start is called before the first frame update
@@ -72,9 +74,12 @@ public class CharacterMovement : MonoBehaviour
             sprite.sortingOrder = 0;
             characterIsHiding = true;
             state = MovementState.hiding;
-            anim.SetBool("isHiding", characterIsHiding);
+            
             Debug.Log("Character is hiding...");
             hideStationObject.layer = 2;
+
+            anim.SetBool("isHiding", characterIsHiding);
+            anim.SetInteger("state", (int)state);
 
         } else
         {
@@ -84,6 +89,11 @@ public class CharacterMovement : MonoBehaviour
             state = MovementState.idle;
             anim.SetBool("isHiding", characterIsHiding);
             Debug.Log("Character is not hiding...");
+        }
+
+        if (can_collect && Input.GetKeyDown(KeyCode.E))
+        {
+            anim.Play(CHAR_COLLECT);
         }
 
 
@@ -142,6 +152,10 @@ public class CharacterMovement : MonoBehaviour
         {
             canHide = true;
         }
+        if (other.gameObject.tag == "ItemCollect")
+        {
+            can_collect = true;
+        }
 
         if (other.gameObject.tag == "FinishPoint")
         {
@@ -156,6 +170,10 @@ public class CharacterMovement : MonoBehaviour
         {
             canHide = true;
         }
+        if (other.gameObject.tag == "ItemCollect")
+        {
+            can_collect = true;
+        }
 
     }
 
@@ -166,7 +184,12 @@ public class CharacterMovement : MonoBehaviour
             canHide = false;
         }
 
-      
+        if (other.gameObject.tag == "ItemCollect")
+        {
+            can_collect = false;
+        }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
