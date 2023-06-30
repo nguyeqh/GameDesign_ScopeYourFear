@@ -67,14 +67,10 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log("State: " + state.ToString());
         dirX = Input.GetAxis("Horizontal");
        
-        player.velocity = new Vector2(dirX* runningSpeed * Time.deltaTime, player.velocity.y);
-
-        Vector3 movement = new Vector3(speed.x = dirX, 0, 0);
-        movement = movement.normalized * runningSpeed * Time.deltaTime;
-        transform.Translate(movement);
+      
 
 
         if (canHide && Input.GetKeyDown("up"))
@@ -215,14 +211,20 @@ public class CharacterMovement : MonoBehaviour
     //---------------------------------------------------
     private void MovementController()
     {
-        
+       
         if (runningMode) {
             runningSpeed= 1.5f;
         } else
         {
             runningSpeed= 1f;
         }
-        
+
+        player.velocity = new Vector2(dirX * runningSpeed * Time.deltaTime, player.velocity.y);
+
+        Vector3 movement = new Vector3(speed.x = dirX, 0, 0);
+        movement = movement.normalized * runningSpeed * Time.deltaTime;
+        transform.Translate(movement);
+
 
         if (Input.GetButtonDown("Jump") && state != MovementState.jumping && isGrounded())
         {
@@ -236,11 +238,13 @@ public class CharacterMovement : MonoBehaviour
         {
             state = MovementState.running;
             runningMode = true;
+            anim.SetInteger("state", (int)state);
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
             state = MovementState.walking;
             runningMode = false;
+            anim.SetInteger("state", (int)state);
         }
 
 
@@ -255,6 +259,7 @@ public class CharacterMovement : MonoBehaviour
             {
                 if (isGrounded())
                 {
+                 
                     anim.Play(CHAR_WALKING);
                     state = MovementState.walking;
                 }
@@ -269,7 +274,7 @@ public class CharacterMovement : MonoBehaviour
             {
 
 
-                if (runningMode && state == MovementState.running)
+                if (runningMode && isGrounded())
                 {
                     if (isGrounded())
                     {
@@ -281,6 +286,7 @@ public class CharacterMovement : MonoBehaviour
                 {
                     if (isGrounded())
                     {
+                       
                         anim.Play(CHAR_WALKING);
                         state = MovementState.walking;
                     }
@@ -302,6 +308,7 @@ public class CharacterMovement : MonoBehaviour
         if (!isGrounded())
         {
             state = MovementState.jumping;
+            anim.SetInteger("state", (int)state);
         } 
         
 
@@ -318,6 +325,7 @@ public class CharacterMovement : MonoBehaviour
        
         anim.SetTrigger("death");
         anim.Play(CHAR_DIE);
+
         Debug.Log("You died!");
 
         var getCaughtPosition = new Vector2(transform.position.x - 3f, transform.position.y + 3f) ;

@@ -1202,7 +1202,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -43.87591, y: -1.7804724, z: -11.329904}
+  m_LocalPosition: {x: -6.626953, y: -1.8076886, z: -11.329904}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5830,7 +5830,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634464932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -70.6, y: -1.3, z: 0}
+  m_LocalPosition: {x: -28.7, y: -2.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5886,7 +5886,8 @@ MonoBehaviour:
     m_Bits: 64
   gameOverController: {fileID: 1083503167}
   stageClearScene: {fileID: 558243024}
-  speed: 100
+  runningSpeed: 0
+  speed: {x: 1, y: 0}
 --- !u!95 &1634464938
 Animator:
   serializedVersion: 5
@@ -6404,7 +6405,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1771755678}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -48.534214, y: -2.6399999, z: -11.329904}
+  m_LocalPosition: {x: -6.6342163, y: -3.7400002, z: -11.329904}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
