@@ -18,18 +18,20 @@ public class CharacterMovement : MonoBehaviour
     public bool stage_finish = false;
     public bool can_collect = false;
     public bool charJustCollectSomething = false;
+    public bool runningMode = false;
 
     [SerializeField] private LayerMask jumpableGround;
     public GameOverController gameOverController; //It's a screen only
     public StageClearScene stageClearScene;
 
-    public float speed;
+    public float runningSpeed;
+    public Vector2 speed = new Vector2(1, 0);
     private float gravity = 4f;
     private bool canHide = false;
-    private float dirX;
+    private float dirX, dirY;
+
     private GameObject hideStationObject, teleporter, teleporterZone2;
     private GameObject blindMonsterObject, monster1Object;
-    private bool monsterInSight, monsterBlindInSight, able2Teleport;
     private const string CHAR_WALKING = "char_walking";
     private const string CHAR_RUNNING = "char_run";
     private const string CHAR_JUMPING = "char_jump";
@@ -51,21 +53,28 @@ public class CharacterMovement : MonoBehaviour
 
         anim.Play(CHAR_IDLE);
 
-        able2Teleport = false;
+        runningMode = false;
 
         
         hideStationObject = GameObject.FindGameObjectWithTag("HideStation");
         monster1Object = GameObject.FindGameObjectWithTag("Monster");
         blindMonsterObject = GameObject.FindGameObjectWithTag("BlindMonster");
-        teleporter = GameObject.FindGameObjectWithTag("Teleporter");
-        teleporterZone2 = GameObject.FindGameObjectWithTag("TeleporterZone2");
+
+      
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        dirX = Input.GetAxisRaw("Horizontal");
+
+        dirX = Input.GetAxis("Horizontal");
+       
+        player.velocity = new Vector2(dirX* runningSpeed * Time.deltaTime, player.velocity.y);
+
+        Vector3 movement = new Vector3(speed.x = dirX, 0, 0);
+        movement = movement.normalized * runningSpeed * Time.deltaTime;
+        transform.Translate(movement);
 
 
         if (canHide && Input.GetKeyDown("up"))
@@ -110,28 +119,16 @@ public class CharacterMovement : MonoBehaviour
         } else
         {
             
-            checkRun4YourLife();
+          
             MovementController();
         }
 
 
     }
 
-    private void checkRun4YourLife()
-    {
-        monsterInSight = monster1Object.GetComponent<MonsterController>().playerInSight;
-        monsterBlindInSight = blindMonsterObject.GetComponent<MonsterBlindController>().playerInSight;
+    // --------------- CHECK FUNCTIONS ------------- //
 
-        if (monsterInSight)
-        {
-            Debug.Log("CharacterController: Monster in sight!");
-        }
-
-        if (monsterBlindInSight)
-        {
-            Debug.Log("CharacterController: Blind monster in sight!");
-        }
-    }
+   
 
     private void checkCanCollectedItem()
     {
@@ -141,16 +138,10 @@ public class CharacterMovement : MonoBehaviour
             charJustCollectSomething = true;
         }
     }
-    private void FixedUpdate()
-    {
-        if (!characterIsHiding)
-        {
-            player.velocity = new Vector2(dirX, player.velocity.y);
-        } else
-        {
-            player.velocity = Vector2.zero;
-        }
-    }
+ 
+    
+
+    // ---------------- ON TRIGGER/COLLISION ENTER ----------------- //
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -225,41 +216,50 @@ public class CharacterMovement : MonoBehaviour
     private void MovementController()
     {
         
-        if (state == MovementState.running) {
-            speed= 30f;
+        if (runningMode) {
+            runningSpeed= 1.5f;
         } else
         {
-            speed= 20f;
+            runningSpeed= 1f;
         }
         
-        player.velocity = new Vector2(dirX * speed , player.velocity.y);
 
         if (Input.GetButtonDown("Jump") && state != MovementState.jumping && isGrounded())
         {
             player.velocity = new Vector2(player.velocity.x, gravity);
+            state= MovementState.jumping;
             //anim.Play(CHAR_JUMPING);
             
         }
 
-        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            state = MovementState.running;
+            runningMode = true;
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            state = MovementState.walking;
+            runningMode = false;
+        }
+
+
         if (dirX > 0f)
         {
-            if (monsterInSight || monsterBlindInSight)
+            if (runningMode && isGrounded())
             {
+                anim.Play(CHAR_RUNNING);
                 state = MovementState.running;
-                if (isGrounded())
-                {
-                    anim.Play(CHAR_RUNNING);
-                }
             }
             else
             {
-                state = MovementState.walking;
                 if (isGrounded())
                 {
                     anim.Play(CHAR_WALKING);
+                    state = MovementState.walking;
                 }
             }
+
             sprite.flipX = false;
             sprite.flipY = false;
         }
@@ -267,21 +267,22 @@ public class CharacterMovement : MonoBehaviour
         {
             if (dirX < 0f)
             {
-                if (monsterInSight || monsterBlindInSight)
+
+
+                if (runningMode && state == MovementState.running)
                 {
-                    state = MovementState.running;
                     if (isGrounded())
                     {
                         anim.Play(CHAR_RUNNING);
+                        state = MovementState.running;
                     }
-
                 }
                 else
                 {
-                    state = MovementState.walking;
                     if (isGrounded())
                     {
                         anim.Play(CHAR_WALKING);
+                        state = MovementState.walking;
                     }
                 }
 
@@ -321,7 +322,7 @@ public class CharacterMovement : MonoBehaviour
 
         var getCaughtPosition = new Vector2(transform.position.x - 3f, transform.position.y + 3f) ;
 
-        transform.position = Vector2.MoveTowards(transform.position, getCaughtPosition, speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, getCaughtPosition, runningSpeed * Time.deltaTime);
 
         characterIsDead = true;
         gameOverController.Setup(0);
@@ -339,7 +340,7 @@ public class CharacterMovement : MonoBehaviour
 
         var finishPosition = new Vector2(transform.position.x + 0.01f, transform.position.y);
 
-        transform.position = Vector2.MoveTowards(transform.position, finishPosition, speed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, finishPosition, runningSpeed * Time.deltaTime);
 
 
     }
