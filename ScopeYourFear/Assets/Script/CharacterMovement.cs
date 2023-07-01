@@ -75,28 +75,36 @@ public class CharacterMovement : MonoBehaviour
 
         if (canHide && Input.GetKeyDown("up"))
         {
-            anim.Play(CHAR_HIDE);
-            Physics2D.IgnoreLayerCollision(8, 9, true);
-            sprite.sortingOrder = 0;
-            characterIsHiding = true;
-            state = MovementState.hiding;
+            if (!characterIsHiding)
+            {
+                anim.Play(CHAR_HIDE);
+                Physics2D.IgnoreLayerCollision(8, 9, true);
+                sprite.sortingOrder = 0;
+                characterIsHiding = true;
+                state = MovementState.hiding;
+
+                Debug.Log("Character is hiding...");
+                hideStationObject.layer = 2;
+                
+
+                anim.SetBool("isHiding", characterIsHiding);
+                anim.SetInteger("state", (int)state);
+
+            } 
+            else
+            {
+                Physics2D.IgnoreLayerCollision(8, 9, false);
+                sprite.sortingOrder = 2;
+                characterIsHiding = false;
+                state = MovementState.idle;
+                anim.SetBool("isHiding", characterIsHiding);
+                Debug.Log("Character is not hiding...");
+                
+            }
+
             
-            Debug.Log("Character is hiding...");
-            hideStationObject.layer = 2;
 
-            anim.SetBool("isHiding", characterIsHiding);
-            anim.SetInteger("state", (int)state);
-
-        } else
-        {
-            Physics2D.IgnoreLayerCollision(8, 9, false);
-            sprite.sortingOrder = 2;
-            characterIsHiding = false;
-            state = MovementState.idle;
-            anim.SetBool("isHiding", characterIsHiding);
-            Debug.Log("Character is not hiding...");
-        }
-
+        } 
         if (can_collect && Input.GetKeyDown(KeyCode.E))
         {
             anim.Play(CHAR_COLLECT);
@@ -114,9 +122,12 @@ public class CharacterMovement : MonoBehaviour
             ShowFinishScene();
         } else
         {
-            
+            if (!characterIsHiding)
+            {
+                MovementController();
+            }
           
-            MovementController();
+           
         }
 
 
@@ -219,11 +230,16 @@ public class CharacterMovement : MonoBehaviour
             runningSpeed= 1f;
         }
 
-        player.velocity = new Vector2(dirX * runningSpeed * Time.deltaTime, player.velocity.y);
+        if (!characterIsHiding)
+        {
+            player.velocity = new Vector2(dirX * runningSpeed * Time.deltaTime, player.velocity.y);
 
-        Vector3 movement = new Vector3(speed.x = dirX, 0, 0);
-        movement = movement.normalized * runningSpeed * Time.deltaTime;
-        transform.Translate(movement);
+            Vector3 movement = new Vector3(speed.x = dirX, 0, 0);
+            movement = movement.normalized * runningSpeed * Time.deltaTime;
+            transform.Translate(movement);
+        }
+
+       
 
 
         if (Input.GetButtonDown("Jump") && state != MovementState.jumping && isGrounded())
