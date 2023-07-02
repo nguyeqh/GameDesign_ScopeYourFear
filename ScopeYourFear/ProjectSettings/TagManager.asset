@@ -13,6 +13,7 @@ TagManager:
   - GameOverBG
   - FinishPoint
   - ItemCollect
+  - Allow2WalkOnObject
   layers:
   - Default
   - TransparentFX

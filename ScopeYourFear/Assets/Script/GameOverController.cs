@@ -5,14 +5,30 @@ using UnityEngine.SceneManagement;
 
 public class GameOverController : MonoBehaviour
 {
-    public void Setup(int points)
+    public GameObject deathPannel, player;
+    public string currentStage;
+
+    private bool charDie = false;
+
+    void Update()
     {
-        gameObject.SetActive(true);
+        charDie = player.GetComponent<CharacterMovement>().characterIsDead;
+        if (charDie)
+        {
+            Setup();
+        }
     }
+
+    public void Setup()
+    {
+        deathPannel.SetActive(true);
+
+    }
+
 
     public void Restart()
     {
-        SceneManager.LoadScene("SampleScene"); //GameLevel2Zone1_Scene
+        SceneManager.LoadScene(currentStage); //GameLevel2Zone1_Scene
     }
 
     public void BackToHome()

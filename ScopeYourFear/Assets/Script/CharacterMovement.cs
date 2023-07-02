@@ -19,10 +19,11 @@ public class CharacterMovement : MonoBehaviour
     public bool can_collect = false;
     public bool charJustCollectSomething = false;
     public bool runningMode = false;
+    private bool walkingOnObject = false;
+
 
     [SerializeField] private LayerMask jumpableGround;
-    public GameOverController gameOverController; //It's a screen only
-
+    
     public float runningSpeed;
     public Vector2 speed = new Vector2(1, 0);
     private float gravity = 4f;
@@ -129,11 +130,7 @@ public class CharacterMovement : MonoBehaviour
            
         }
 
-        //----------- ESC TO PAUSE GAME -----------// 
-        if (Input.GetKeyDown(KeyCode.Escape)) 
-        {
-
-        }
+        
     }
 
     // --------------- CHECK FUNCTIONS ------------- //
@@ -179,6 +176,35 @@ public class CharacterMovement : MonoBehaviour
             stage_finish = true;
         }
 
+        if (other.gameObject.tag == "Allow2WalkOnObject")
+        {
+            walkingOnObject = true;
+        }
+
+    }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Allow2WalkOnObject")
+        {
+            walkingOnObject= true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Allow2WalkOnObject")
+        {
+            walkingOnObject = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("FinishPoint"))
+        {
+            stage_finish = true;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -192,8 +218,6 @@ public class CharacterMovement : MonoBehaviour
         {
             can_collect = true;
         }
-        
-
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -212,13 +236,7 @@ public class CharacterMovement : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("FinishPoint"))
-        {
-            stage_finish = true;
-        }
-    }
+  
 
 
 
@@ -336,7 +354,7 @@ public class CharacterMovement : MonoBehaviour
 
     private bool isGrounded()
     {
-        return Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
+        return Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, Vector2.down, .1f, jumpableGround) || walkingOnObject;
     }
 
     private void Die()
@@ -352,7 +370,6 @@ public class CharacterMovement : MonoBehaviour
         transform.position = Vector2.MoveTowards(transform.position, getCaughtPosition, runningSpeed * Time.deltaTime);
 
         characterIsDead = true;
-        gameOverController.Setup(0);
 
         player.bodyType = RigidbodyType2D.Static;
         //monster1Object.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
