@@ -30,7 +30,7 @@ public class CharacterMovement : MonoBehaviour
     private bool canHide = false;
     private float dirX, dirY;
 
-    private GameObject hideStationObject, teleporter, teleporterZone2;
+    private GameObject hideStationObject;
     private GameObject blindMonsterObject, monster1Object;
     private const string CHAR_WALKING = "char_walking";
     private const string CHAR_RUNNING = "char_run";
@@ -130,7 +130,11 @@ public class CharacterMovement : MonoBehaviour
            
         }
 
+        //----------- ESC TO PAUSE GAME -----------// 
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        {
 
+        }
     }
 
     // --------------- CHECK FUNCTIONS ------------- //
