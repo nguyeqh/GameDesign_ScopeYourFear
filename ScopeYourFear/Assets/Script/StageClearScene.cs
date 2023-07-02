@@ -2,26 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class StageClearScene : MonoBehaviour
 {
-    int level = 2;
+    public GameObject successPannel, player;
+    public string nextStage;
 
-    public void Setup(int levelNext)
+    private bool stage_finish = false;
+
+    void Update()
     {
-        gameObject.SetActive(true);
-        this.level = levelNext;
+        stage_finish = player.GetComponent<CharacterMovement>().stage_finish;
+        if (stage_finish)
+        {
+            Setup();
+        }
+    }
+
+
+    public void Setup()
+    {
+        successPannel.SetActive(true);
+    
     }
 
     public void BackToHome()
     {
+        Debug.Log("Back to Home button clicked!");
         SceneManager.LoadScene("HomeScreen");
     }
 
     public void NextLevel()
     {
-        string SceneLevel = "SceneLevel" + level.ToString();
-        Debug.Log(SceneLevel);
-        SceneManager.LoadScene(SceneLevel);
+        try
+        {
+            Debug.Log(nextStage);
+            SceneManager.LoadScene(nextStage);
+        }
+        catch (SceneNotFoundException)
+        {
+            Debug.LogError("Scene not found: " + nextStage);
+            // Perform alternative action or display error message
+        }
+        
     }
+}
+
+public class SceneNotFoundException : Exception
+{
+    public SceneNotFoundException() { }
+
+    public SceneNotFoundException(string message)
+        : base(message) { }
+
+    public SceneNotFoundException(string message, Exception innerException)
+        : base(message, innerException) { }
 }

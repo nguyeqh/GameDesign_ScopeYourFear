@@ -22,7 +22,6 @@ public class CharacterMovement : MonoBehaviour
 
     [SerializeField] private LayerMask jumpableGround;
     public GameOverController gameOverController; //It's a screen only
-    public StageClearScene stageClearScene;
 
     public float runningSpeed;
     public Vector2 speed = new Vector2(1, 0);
@@ -363,7 +362,6 @@ public class CharacterMovement : MonoBehaviour
 
     private void ShowFinishScene()
     {
-        stageClearScene.Setup(2);
         player.bodyType = RigidbodyType2D.Static;
 
         var finishPosition = new Vector2(transform.position.x + 0.01f, transform.position.y);

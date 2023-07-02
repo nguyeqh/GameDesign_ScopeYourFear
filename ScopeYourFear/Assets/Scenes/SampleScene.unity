@@ -955,7 +955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 244, y: -22}
+  m_AnchoredPosition: {x: 244, y: -66.3}
   m_SizeDelta: {x: 116.3649, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &213804599
@@ -1002,10 +1002,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameOverController, Assembly-CSharp
-        m_MethodName: NextLevel
-        m_Mode: 3
+      - m_Target: {fileID: 732050798}
+        m_TargetAssemblyTypeName: StageClearScene, Assembly-CSharp
+        m_MethodName: BackToHome
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2098,7 +2098,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -43.87591, y: -1.7804724, z: -11.329904}
+  m_LocalPosition: {x: -43.87591, y: -1.7804728, z: -11.329904}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2356,6 +2356,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1a4df1576bfd7d408e00849ee11bf06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  successPannel: {fileID: 558243019}
+  player: {fileID: 1634464932}
+  nextStage: SampleScene_zone2
 --- !u!95 &558243025
 Animator:
   serializedVersion: 5
@@ -3563,6 +3566,7 @@ GameObject:
   m_Component:
   - component: {fileID: 732050796}
   - component: {fileID: 732050797}
+  - component: {fileID: 732050798}
   m_Layer: 0
   m_Name: Cameras
   m_TagString: Untagged
@@ -3600,6 +3604,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pausePannel: {fileID: 959259840}
+--- !u!114 &732050798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732050795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a4df1576bfd7d408e00849ee11bf06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  successPannel: {fileID: 558243019}
+  player: {fileID: 1634464932}
+  nextStage: SampleScene_zone2
 --- !u!1 &779457065
 GameObject:
   m_ObjectHideFlags: 0
@@ -6357,7 +6376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -45}
+  m_AnchoredPosition: {x: 0, y: -0.0000076293945}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1226289359
@@ -6796,14 +6815,14 @@ EdgeCollider2D:
   - {x: -56.949738, y: -4.7311625}
   - {x: -56.120544, y: -4.511591}
   - {x: -55.799717, y: -4.30299}
-  - {x: -55.131104, y: -3.9817367}
-  - {x: -54.38555, y: -3.3283958}
-  - {x: -53.586327, y: -2.78298}
-  - {x: -52.476395, y: -2.5424538}
-  - {x: -51.732998, y: -2.4599597}
+  - {x: -54.83783, y: -4.0026846}
+  - {x: -54.09228, y: -3.3912396}
+  - {x: -53.020733, y: -2.824876}
+  - {x: -52.350708, y: -2.7728817}
+  - {x: -51.691105, y: -2.6694396}
   - {x: -51.400894, y: -2.728046}
   - {x: -50.65247, y: -2.8860302}
-  - {x: -49.6659, y: -3.2021408}
+  - {x: -49.6659, y: -3.3906724}
   - {x: -48.74829, y: -4.2271037}
   - {x: -48.43539, y: -4.2704515}
   - {x: -47.7859, y: -5.0122533}
@@ -8397,7 +8416,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634464932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -70.37, y: -2.05, z: 0}
+  m_LocalPosition: {x: -71.3, y: -1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8454,7 +8473,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   gameOverController: {fileID: 1083503167}
-  stageClearScene: {fileID: 558243024}
   runningSpeed: 0
   speed: {x: 1, y: 0}
 --- !u!95 &1634464938
@@ -8696,10 +8714,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameOverController, Assembly-CSharp
+      - m_Target: {fileID: 732050798}
+        m_TargetAssemblyTypeName: StageClearScene, Assembly-CSharp
         m_MethodName: NextLevel
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9085,7 +9103,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1771755678}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -48.30422, y: -3.3899999, z: -11.329904}
+  m_LocalPosition: {x: -49.23422, y: -2.44, z: -11.329904}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
