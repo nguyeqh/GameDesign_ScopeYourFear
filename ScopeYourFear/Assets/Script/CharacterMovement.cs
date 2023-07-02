@@ -23,7 +23,7 @@ public class CharacterMovement : MonoBehaviour
 
 
     [SerializeField] private LayerMask jumpableGround;
-    [SerializeField] private AudioSource walkingSoundEffect, breathHidingSoundEffect, runningSoundEffect;
+    [SerializeField] private AudioSource walkingSoundEffect, breathHidingSoundEffect, runningSoundEffect, jumpSoundEffect;
 
     public float runningSpeed;
     public Vector2 speed = new Vector2(1, 0);
@@ -147,7 +147,11 @@ public class CharacterMovement : MonoBehaviour
     private void checkAnimation2SetSoundEffect()
     {
         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
-        breathHidingSoundEffect.enabled = true;
+        if (!characterIsDead)
+        {
+            breathHidingSoundEffect.enabled = true;
+        } else { breathHidingSoundEffect.enabled = false; }
+       
 
         if (stateInfo.IsName(CHAR_WALKING))
         { 
@@ -170,8 +174,16 @@ public class CharacterMovement : MonoBehaviour
         }
         else
         { runningSoundEffect.enabled = false;
-          
+ 
         }
+
+
+        if (stateInfo.IsName(CHAR_RUNNING))
+        {
+            jumpSoundEffect.enabled = true;
+        }
+        else
+        { jumpSoundEffect.enabled = false; }
 
 
     }

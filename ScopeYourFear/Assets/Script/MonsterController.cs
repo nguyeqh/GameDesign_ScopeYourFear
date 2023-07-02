@@ -21,6 +21,7 @@ public class MonsterController : MonoBehaviour
     public bool facingRight = false;
 
     public AnimatorStateInfo currentState;
+    [SerializeField] private AudioSource monster1RoarSound, monster1ChaseSound;
 
     private bool outOfSight = false;
     private bool characterIsHiding = false;
@@ -71,7 +72,8 @@ public class MonsterController : MonoBehaviour
         {
             anim.Play(MONSTER_DETEC);
             characterWasSeen = true;
-            StartCoroutine(DelayedChase(anim.GetCurrentAnimatorStateInfo(0).length));
+            monster1RoarSound.enabled = true;
+            StartCoroutine(DelayedChase(anim.GetCurrentAnimatorStateInfo(0).length + 2f));
         }
 
         if (state == MovementState.chasing && !characterIsDead)
@@ -94,11 +96,13 @@ public class MonsterController : MonoBehaviour
             if (outOfSight)
             {
                 ChaseOutOfSight();
+                
             }
         }
 
         anim.SetInteger("stateMon", (int)state);
         sprite.flipX = false;
+        checkAnimation2SetSoundEffect();
 
     }
 
@@ -109,12 +113,35 @@ public class MonsterController : MonoBehaviour
         ChasePlayer();
     }
 
+    private void checkAnimation2SetSoundEffect()
+    {
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-    private void OnTriggerEnter2D(Collider2D other)
+        if (stateInfo.IsName(MONSTER_DETEC))
+        {
+            monster1RoarSound.enabled = true;
+        } else
+        {
+            monster1RoarSound.enabled = false;
+        }
+
+
+        if (stateInfo.IsName(MONSTER1_CHASE) && !outOfSight)
+        { 
+            monster1ChaseSound.enabled = true;
+        } else
+        {
+            monster1ChaseSound.enabled = false;
+        }
+    }
+
+
+        private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")
         {
             playerInSight = true;
+      
             state = MovementState.detecting;
             Debug.Log("Player in sight!");
 
@@ -122,16 +149,13 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    //private void OnTriggerExit2D(Collider2D other)
-    //{
-    //    if (other.gameObject.tag == "Player")
-    //    {
-    //        Debug.Log("Player is out of monster's sight");
-    //        playerInSight = false;
-            
-    //        outOfSight= true;
-    //    }
-    //}
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            monster1ChaseSound.enabled = false;
+        }
+    }
 
     private void ChasePlayer()
     {
@@ -150,12 +174,7 @@ public class MonsterController : MonoBehaviour
             
         }
 
-        if (playerPosition.x > transform.position.x)
-        {
-           if (!facingRight) FlipChar();
-            //sprite.flipX = false;
-            transform.position += Vector3.right * speed * Time.deltaTime;
-        }
+
 
         //transform.position = Vector2.MoveTowards(transform.position, playerPosition, speed * Time.deltaTime);
         //transform.velocity = new Vector2(transform.dirX * speed, transform.velocity.y);
@@ -169,7 +188,9 @@ public class MonsterController : MonoBehaviour
             playerInSight = false;
             state = MovementState.chaseOutOfSight;
         }
-       
+
+        
+
     }
 
     private void FlipChar()
