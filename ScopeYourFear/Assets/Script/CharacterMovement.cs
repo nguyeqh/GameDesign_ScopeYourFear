@@ -23,7 +23,8 @@ public class CharacterMovement : MonoBehaviour
 
 
     [SerializeField] private LayerMask jumpableGround;
-    
+    [SerializeField] private AudioSource walkingSoundEffect, breathHidingSoundEffect, runningSoundEffect;
+
     public float runningSpeed;
     public Vector2 speed = new Vector2(1, 0);
     private float gravity = 4f;
@@ -69,9 +70,6 @@ public class CharacterMovement : MonoBehaviour
     {
         Debug.Log("State: " + state.ToString());
         dirX = Input.GetAxis("Horizontal");
-       
-      
-
 
         if (canHide && Input.GetKeyDown("up"))
         {
@@ -125,12 +123,12 @@ public class CharacterMovement : MonoBehaviour
             if (!characterIsHiding)
             {
                 MovementController();
+              
             }
-          
-           
         }
+        checkAnimation2SetSoundEffect();
 
-        
+
     }
 
     // --------------- CHECK FUNCTIONS ------------- //
@@ -145,8 +143,41 @@ public class CharacterMovement : MonoBehaviour
             charJustCollectSomething = true;
         }
     }
- 
-    
+
+    private void checkAnimation2SetSoundEffect()
+    {
+        AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        breathHidingSoundEffect.enabled = true;
+
+        if (stateInfo.IsName(CHAR_WALKING))
+        { 
+            walkingSoundEffect.enabled = true;
+        } else 
+        {   walkingSoundEffect.enabled = false; }
+
+        if (stateInfo.IsName(CHAR_HIDE) || characterIsHiding || stateInfo.IsName(CHAR_IDLE) || stateInfo.IsName(CHAR_WALKING))
+        {
+
+            breathHidingSoundEffect.pitch = 0.5f;
+        }
+        else
+        { breathHidingSoundEffect.pitch = 0.9f; }
+
+        if (stateInfo.IsName(CHAR_RUNNING))
+        {
+            runningSoundEffect.enabled = true;
+          
+        }
+        else
+        { runningSoundEffect.enabled = false;
+          
+        }
+
+
+    }
+
+
+
 
     // ---------------- ON TRIGGER/COLLISION ENTER ----------------- //
 
@@ -282,6 +313,7 @@ public class CharacterMovement : MonoBehaviour
             state = MovementState.walking;
             runningMode = false;
             anim.SetInteger("state", (int)state);
+           
         }
 
 
