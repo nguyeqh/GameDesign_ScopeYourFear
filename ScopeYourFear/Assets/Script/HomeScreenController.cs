@@ -7,7 +7,7 @@ public class HomeScreenController : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Level1_zone1");
     }
 
     public void QuitGame()

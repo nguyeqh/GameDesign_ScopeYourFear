@@ -24,6 +24,7 @@ public class CharacterMovement : MonoBehaviour
 
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private AudioSource walkingSoundEffect, breathHidingSoundEffect, runningSoundEffect, jumpSoundEffect;
+    [SerializeField] private AudioSource screamSoundEffect;
 
     public float runningSpeed;
     public Vector2 speed = new Vector2(1, 0);
@@ -55,6 +56,7 @@ public class CharacterMovement : MonoBehaviour
         anim.Play(CHAR_IDLE);
 
         runningMode = false;
+        screamSoundEffect.enabled = false;
 
         
         hideStationObject = GameObject.FindGameObjectWithTag("HideStation");
@@ -416,6 +418,7 @@ public class CharacterMovement : MonoBehaviour
         characterIsDead = true;
 
         player.bodyType = RigidbodyType2D.Static;
+        screamSoundEffect.enabled = true; 
         //monster1Object.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
         //blindMonsterObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
 
