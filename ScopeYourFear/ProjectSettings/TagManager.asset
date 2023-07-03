@@ -14,6 +14,7 @@ TagManager:
   - FinishPoint
   - ItemCollect
   - Allow2WalkOnObject
+  - EscapeDoorNeedKey
   layers:
   - Default
   - TransparentFX

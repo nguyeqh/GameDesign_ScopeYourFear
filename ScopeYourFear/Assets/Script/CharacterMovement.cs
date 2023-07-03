@@ -33,6 +33,7 @@ public class CharacterMovement : MonoBehaviour
     private float dirX, dirY;
 
     private GameObject hideStationObject;
+    GameObject currentTeleporter;
     private GameObject blindMonsterObject, monster1Object;
     private const string CHAR_WALKING = "char_walking";
     private const string CHAR_RUNNING = "char_run";
@@ -73,6 +74,16 @@ public class CharacterMovement : MonoBehaviour
         Debug.Log("State: " + state.ToString());
         dirX = Input.GetAxis("Horizontal");
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (currentTeleporter != null)
+            {
+                var positionTele = currentTeleporter.GetComponent<Teleporter>().GetDestination().position;
+                transform.position = positionTele;
+            }
+        }
+
+
         if (canHide && Input.GetKeyDown("up"))
         {
             if (!characterIsHiding)
@@ -105,6 +116,8 @@ public class CharacterMovement : MonoBehaviour
             
 
         } 
+
+        
         if (can_collect && Input.GetKeyDown(KeyCode.E))
         {
             anim.Play(CHAR_COLLECT);
@@ -250,6 +263,11 @@ public class CharacterMovement : MonoBehaviour
         {
             stage_finish = true;
         }
+
+        if (collision.CompareTag("Teleporter"))
+        {
+            currentTeleporter = collision.gameObject;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -276,6 +294,14 @@ public class CharacterMovement : MonoBehaviour
         {
             can_collect = false;
             charJustCollectSomething = false;
+        }
+
+        if (other.CompareTag("Teleporter"))
+        {
+            if (other.gameObject == currentTeleporter)
+            {
+                currentTeleporter = null;
+            }
         }
 
 
