@@ -15,6 +15,7 @@ TagManager:
   - ItemCollect
   - Allow2WalkOnObject
   - EscapeDoorNeedKey
+  - Key
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Player
   - Monster
   - BlindMonster
-  - 
+  - Objects
   - 
   - 
   - 

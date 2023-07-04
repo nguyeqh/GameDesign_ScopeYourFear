@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LockedDoorController : MonoBehaviour
 {
-    public GameObject player;
+    public GameObject Key;
     private BoxCollider2D doorCollision;
     private SpriteRenderer spriteRenderer;
     public GameObject Message;
@@ -49,8 +49,13 @@ public class LockedDoorController : MonoBehaviour
                     Message.SetActive(true);
                 }
             }
-        }
+        } 
         
+    }
+
+    private void UnlockDoor()
+    {
+        locked = false;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -61,6 +66,12 @@ public class LockedDoorController : MonoBehaviour
             playerAtDoor= true;
 
         }
+
+        if (other.gameObject.tag == "Key")
+        {
+            UnlockDoor();
+
+        }
     }
 
     private void OnCollisionStay2D(Collision2D other)
@@ -69,6 +80,16 @@ public class LockedDoorController : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             playerAtDoor = true;
+
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            playerAtDoor = false;
+            Message.SetActive(false);
 
         }
     }

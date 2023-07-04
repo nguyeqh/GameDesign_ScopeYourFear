@@ -144,6 +144,8 @@ public class MonsterController : MonoBehaviour
       
             state = MovementState.detecting;
             Debug.Log("Player in sight!");
+            outOfSight = false;
+            monsterBody.isTrigger = false;
 
             anim.SetInteger("stateMon", (int) state);
         }
@@ -172,6 +174,14 @@ public class MonsterController : MonoBehaviour
             //sprite.flipX = true;
             if (facingRight) FlipChar();
             
+        }
+
+        if (playerPosition.x > transform.position.x)
+        {
+            transform.position += Vector3.right * speed * Time.deltaTime;
+            //sprite.flipX = true;
+            if (!facingRight) FlipChar();
+
         }
 
 

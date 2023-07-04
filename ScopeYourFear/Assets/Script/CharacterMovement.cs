@@ -136,6 +136,9 @@ public class CharacterMovement : MonoBehaviour
         if (characterIsHiding)
         {
             anim.Play(CHAR_HIDE);
+        } else
+        {
+            Physics2D.IgnoreLayerCollision(8, 9, false);
         }
 
 
