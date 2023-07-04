@@ -152,8 +152,9 @@ public class CharacterMovement : MonoBehaviour
                 MovementController();
               
             }
+            checkAnimation2SetSoundEffect();
         }
-        checkAnimation2SetSoundEffect();
+        
 
 
     }
@@ -334,21 +335,21 @@ public class CharacterMovement : MonoBehaviour
     //---------------------------------------------------
     private void MovementController()
     {
-       
+        float normalSpeed;
         if (runningMode) {
-            //runningSpeed= 1.5f;
-            runningSpeed = 4.5f;
+            normalSpeed = runningSpeed*1.5f;
+            //runningSpeed = 4.5f;
         } else
         {
-            runningSpeed= 1f;
+            normalSpeed = runningSpeed;
         }
 
         if (!characterIsHiding)
         {
-            player.velocity = new Vector2(dirX * runningSpeed * Time.deltaTime, player.velocity.y);
+            player.velocity = new Vector2(dirX * normalSpeed * Time.deltaTime, player.velocity.y);
 
             Vector3 movement = new Vector3(speed.x = dirX, 0, 0);
-            movement = movement.normalized * runningSpeed * Time.deltaTime;
+            movement = movement.normalized * normalSpeed * Time.deltaTime;
             transform.Translate(movement);
         }
 
