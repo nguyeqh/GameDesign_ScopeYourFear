@@ -6,6 +6,16 @@ public class MessagePopUp : MonoBehaviour
 {
     public GameObject Message;
 
+    private void OnCollisionEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            Message.SetActive(true);
+        }
+    }
+
+    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")

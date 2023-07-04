@@ -33,7 +33,7 @@ public class CharacterMovement : MonoBehaviour
     private float dirX, dirY;
 
     private GameObject hideStationObject;
-    GameObject currentTeleporter;
+    GameObject currentTeleporter, secondFloorTeleporter;
     private GameObject blindMonsterObject, monster1Object;
     private const string CHAR_WALKING = "char_walking";
     private const string CHAR_RUNNING = "char_run";
@@ -79,6 +79,15 @@ public class CharacterMovement : MonoBehaviour
             if (currentTeleporter != null)
             {
                 var positionTele = currentTeleporter.GetComponent<Teleporter>().GetDestination().position;
+                transform.position = positionTele;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (secondFloorTeleporter != null)
+            {
+                var positionTele = secondFloorTeleporter.GetComponent<Teleporter>().GetSecondFloorDestination().position;
                 transform.position = positionTele;
             }
         }
@@ -267,6 +276,7 @@ public class CharacterMovement : MonoBehaviour
         if (collision.CompareTag("Teleporter"))
         {
             currentTeleporter = collision.gameObject;
+            secondFloorTeleporter= collision.gameObject;
         }
     }
 
@@ -301,6 +311,13 @@ public class CharacterMovement : MonoBehaviour
             if (other.gameObject == currentTeleporter)
             {
                 currentTeleporter = null;
+                
+            }
+
+            if (other.gameObject == secondFloorTeleporter)
+            {
+                secondFloorTeleporter = null;
+
             }
         }
 
