@@ -24,6 +24,16 @@ public class LockedDoorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var KeyPosition = Key.transform.position;
+        float distance = Vector3.Distance(KeyPosition, transform.position);
+
+        if (distance < 5f)
+        {
+            UnlockDoor();
+        }
+
+
+
         if (playerAtDoor)
         {
             if (Input.GetKeyDown(KeyCode.T) && !locked)
@@ -55,6 +65,7 @@ public class LockedDoorController : MonoBehaviour
 
     private void UnlockDoor()
     {
+        Debug.Log("Unlock successfullly!");
         locked = false;
     }
 
@@ -67,7 +78,7 @@ public class LockedDoorController : MonoBehaviour
 
         }
 
-        if (other.gameObject.tag == "Key")
+        if (other.gameObject.tag == "ItemCollect")
         {
             UnlockDoor();
 

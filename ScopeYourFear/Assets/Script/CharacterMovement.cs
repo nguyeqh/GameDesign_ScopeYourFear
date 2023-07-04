@@ -336,7 +336,8 @@ public class CharacterMovement : MonoBehaviour
     {
        
         if (runningMode) {
-            runningSpeed= 1.5f;
+            //runningSpeed= 1.5f;
+            runningSpeed = 4.5f;
         } else
         {
             runningSpeed= 1f;
