@@ -197,6 +197,7 @@ public class MonsterController : MonoBehaviour
             transform.position += Vector3.left * speed * Time.deltaTime;
             playerInSight = false;
             state = MovementState.chaseOutOfSight;
+            if (facingRight) FlipChar();
         }
 
         
