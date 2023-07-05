@@ -10,7 +10,7 @@ public class MonsterBlindController : MonoBehaviour
     private SpriteRenderer sprite;
     private BoxCollider2D monsterVision;
     private PolygonCollider2D monsterBody;
-    private GameObject player, monster1Object;
+    public GameObject player, monster1Object;
 
     //private enum MovementState { idle =  0, walking = 1, detecting = 2, chasing = 3, catching = 4 };
     private enum MovementState { idle, walking, detecting, chasing, catching, chaseOutOfSight };
@@ -44,10 +44,7 @@ public class MonsterBlindController : MonoBehaviour
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         monsterBody = GetComponent<PolygonCollider2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
         //currentState = anim.GetCurrentAnimatorStateInfo(0);
-        monster1Object = GameObject.FindGameObjectWithTag("Monster");
-
         characterIsHiding = player.GetComponent<CharacterMovement>().characterIsHiding;
         characterIsDead = player.GetComponent<CharacterMovement>().characterIsDead;
         sprite.sortingOrder = 5;
