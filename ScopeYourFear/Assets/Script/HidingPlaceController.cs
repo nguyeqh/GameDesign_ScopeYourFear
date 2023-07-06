@@ -28,7 +28,7 @@ public class HidingPlaceController : MonoBehaviour
         {
             canHide= true;
 
-            Debug.Log("HidePlaceController: Player can hide!");
+         
         }
     }
 
@@ -39,9 +39,7 @@ public class HidingPlaceController : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             canHide = false;
-            Debug.Log("HidePlaceController: Player can not hide!");
-            sprite.sortingOrder = 0;
-
+           
         }
         
     }
@@ -53,9 +51,12 @@ public class HidingPlaceController : MonoBehaviour
         if (canHide && playerIsHiding)
         {
             Debug.Log("HidePlaceController: Hide Station just move up!");
-            sprite.sortingOrder = 3;
+            sprite.sortingOrder = 4;
 
-        } 
+        } else
+        {
+            sprite.sortingOrder = 0;
+        }
         
     }
 }

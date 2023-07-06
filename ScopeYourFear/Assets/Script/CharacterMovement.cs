@@ -9,6 +9,7 @@ public class CharacterMovement : MonoBehaviour
     private Animator anim;
     private SpriteRenderer sprite;
     private BoxCollider2D boxCollider;
+    private UnityEngine.Rendering.Universal.ShadowCaster2D shadowCaster2D;
 
     //private enum MovementState { idle = 0, walking = 1, jumping = 2, falling = 3, hiding = 4 , running = 5, collect = 6};
     private enum MovementState {idle, walking, jumping, falling, hiding, running, collect};
@@ -53,6 +54,7 @@ public class CharacterMovement : MonoBehaviour
         player = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+        shadowCaster2D = GetComponent<UnityEngine.Rendering.Universal.ShadowCaster2D>();
 
         anim.Play(CHAR_IDLE);
 
@@ -93,9 +95,9 @@ public class CharacterMovement : MonoBehaviour
         }
 
 
-        if (canHide && Input.GetKeyDown("up"))
+        if (Input.GetKeyDown("up"))
         {
-            if (!characterIsHiding)
+            if (canHide && !characterIsHiding)
             {
                 anim.Play(CHAR_HIDE);
                 Physics2D.IgnoreLayerCollision(8, 9, true);
@@ -109,16 +111,20 @@ public class CharacterMovement : MonoBehaviour
 
                 anim.SetBool("isHiding", characterIsHiding);
                 anim.SetInteger("state", (int)state);
+                canHide= false;
+                shadowCaster2D.enabled = false;
 
             } 
             else
             {
                 Physics2D.IgnoreLayerCollision(8, 9, false);
-                sprite.sortingOrder = 2;
+                sprite.sortingOrder = 3;
                 characterIsHiding = false;
                 state = MovementState.idle;
                 anim.SetBool("isHiding", characterIsHiding);
                 Debug.Log("Character is not hiding...");
+                anim.Play(CHAR_IDLE);
+                shadowCaster2D.enabled = true;
                 
             }
 
@@ -155,7 +161,7 @@ public class CharacterMovement : MonoBehaviour
             checkAnimation2SetSoundEffect();
         }
         
-
+       
 
     }
 
@@ -267,6 +273,11 @@ public class CharacterMovement : MonoBehaviour
         if (other.gameObject.tag == "Allow2WalkOnObject")
         {
             walkingOnObject = false;
+        }
+
+        if (other.gameObject.tag == "HideStation")
+        {
+            canHide = false;
         }
     }
 
