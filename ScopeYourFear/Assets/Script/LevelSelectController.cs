@@ -15,9 +15,25 @@ public class LevelSelectController : MonoBehaviour
         SceneManager.LoadScene("SampleScene");
     }
 
+
+    public void ReviewLevel1()
+    {
+        SceneManager.LoadScene("ReviewLevel1");
+    }
+
+    public void ReviewLevel2()
+    {
+        SceneManager.LoadScene("ReviewLevel2");
+    }
+
     public void BackToHome()
     {
         SceneManager.LoadScene("HomeScreen");
+    }
+
+    public void MapSelection()
+    {
+        SceneManager.LoadScene("MapSelectionScene");
     }
 
     public void QuitGame()
