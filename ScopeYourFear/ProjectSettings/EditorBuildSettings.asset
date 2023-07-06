@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/HomeScreen.unity
     guid: d8a41a015f3efbf49a5e7de09c03d1b3
   - enabled: 1
+    path: Assets/Scenes/MapSelectionScene.unity
+    guid: 38432a07b7a2a2b44afa54ef0393cb35
+  - enabled: 1
     path: Assets/Scenes/Level1_zone1.unity
     guid: 9e95bcf201ccbb245bf33e0b4a56f17c
   - enabled: 1
